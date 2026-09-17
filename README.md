@@ -1,83 +1,68 @@
-# CRM - Enterprise Multi-Tenant Business Management & POS Platform
+# Enterprise Business Management & POS Platform
 
-A modern, full-stack, multi-tenant enterprise business management system and smart POS suite built with **Next.js, Node.js, Express, PostgreSQL, and Prisma ORM**. The platform provides end-to-end operational software tailored for **Retailers**, **Restaurants**, and **Service-based Agencies**, alongside a centralized **Seller Administration Portal**.
+Full-stack multi-tenant ERP and point-of-sale system built with Next.js, Node.js/Express, PostgreSQL, and Prisma. The platform supports three business verticals (Retail, Restaurant, and Services) under a shared architecture, paired with an administrative portal for merchant onboarding and lead tracking.
 
----
+## Architecture
 
-## 🏗️ System Architecture
-
-The repository is structured into two core ecosystems:
+The project is organized into two primary applications:
 
 ```text
-d:\Training\CRM\
-├── CRM-Main/                      # Core Multi-Tenant Business Operating System
-│   ├── crm-frontend/              # Next.js App Router POS, Dashboard & Client UI (Port 3000)
-│   └── crm-backend/               # Express.js REST API & Prisma Engine (Port 8001)
+├── CRM-Main/
+│   ├── crm-frontend/        # Next.js App Router UI (POS, KOT, ERP dashboard) - port 3000
+│   └── crm-backend/         # Express REST API with Prisma ORM - port 8001
 │
-└── CRM-Seller/                    # Platform Management & Merchant Portal
-    ├── frontend/                  # Next.js Merchant Administration Dashboard (Port 3001)
-    └── backend/                   # Express.js Seller & Lead Processing API (Port 5050)
+└── CRM-Seller/
+    ├── frontend/            # Merchant & seller management portal - port 3001
+    └── backend/             # Seller backend & onboarding service - port 5050
 ```
 
----
+## Features
 
-## 🚀 Key Modules & Capabilities
+### Retail POS & Inventory (CRM-Main)
+- Barcode scanning, cart operations, dynamic discounts, and cash/card checkout.
+- Multi-unit inventory tracking, low-stock alerts, supplier bills, and category management.
+- Thermal and PDF receipt/invoice generation via PDFKit.
+- Customer ledgers, store credit, and installment tracking.
 
-### 1. 🛒 Retail POS & Smart Inventory (`CRM-Main`)
-* **POS Checkout**: Lightning-fast sales counter with real-time barcode scanning, item search, and dynamic discount calculations.
-* **Smart Inventory**: Multi-unit stock management, low-stock threshold alerts, category breakdowns, and purchase bill auditing.
-* **Invoicing & Receipts**: Instant thermal and PDF invoice generation with tax summaries, customer ledger tracking, and payment recording.
-* **Payment Plans**: Flexible installment plans and customer credit ledger management.
+### Restaurant Management (CRM-Main)
+- Live floorplan with table occupancy states (Vacant, Occupied, Billed, Reserved).
+- Kitchen Order Ticket (KOT) workflow routing orders from waiters to kitchen screens.
+- Menu configuration with modifiers, add-ons, and combo items.
 
-### 2. 🍽️ Restaurant Management (`CRM-Main`)
-* **Interactive Table Floorplan**: Real-time table status tracking (Vacant, Occupied, Billed, Reserved).
-* **Kitchen Order Ticket (KOT)**: Kitchen display stream routing orders directly from waitstaff to chefs with audio/visual status indicators.
-* **Menu Management**: Categorized food items, customizable modifiers/add-ons, and combo meals.
+### Service Agency ERP (CRM-Main)
+- Client directory with interaction history and project tracking.
+- Task assignments, milestone deadlines, and employee work logs.
+- Timesheet logging with one-click conversion to billable invoices.
+- Basic accounting ledger with expense tracking and P&L summaries.
 
-### 3. 💼 Services & Agency ERP (`CRM-Main`)
-* **Client CRM**: Comprehensive client directories, communication history, and custom engagement records.
-* **Project & Task Tracking**: Milestone monitoring, employee assignment, and deadline tracking.
-* **Timesheets & Billing**: Service hours logging and direct-to-invoice billing conversion.
-* **Accounting Sheets**: Automated journal entries, profit/loss overviews, and fiscal period tracking.
+### HRMS & Payroll (CRM-Main)
+- Daily clock-in/out tracking and shift scheduling.
+- Leave request and approval workflows.
+- Automated payroll runs with tax/deduction calculations and payslip downloads.
 
-### 4. 👥 HRMS & Workforce Management (`CRM-Main`)
-* **Attendance & Biometrics**: Digital employee clock-in/clock-out tracking with shift scheduling.
-* **Leave Management**: Employee leave requests with manager/owner approval workflows.
-* **Automated Payroll**: Salary calculations, deductions, bonuses, and downloadable monthly pay slips.
+### Platform Administration (CRM-Seller)
+- Merchant registration, business verification document review, and approvals.
+- Lead intake pipeline with stage tracking (New, Contacted, Qualified, Lost).
+- Customer support ticket handling and callback request queues.
+- Feedback and review moderation.
 
-### 5. 🏢 Platform Administration & Merchant Portal (`CRM-Seller`)
-* **Merchant Onboarding**: Application intake, business verification documents (Tax ID, Licenses), and approval pipelines.
-* **Lead Management**: Public lead capture pipelines with status lifecycle tracking (`New`, `Contacted`, `Qualified`, `Lost`).
-* **Support Helpdesk**: Unified intake for support tickets and callback scheduling.
-* **Review Moderation**: Customer feedback management and review approval workflows.
+## Tech Stack
 
----
+- **Frontend:** Next.js (App Router), React, Tailwind CSS, Lucide, Chart.js / Recharts
+- **Backend:** Node.js, Express, Prisma ORM
+- **Database:** PostgreSQL (multi-tenant schema using scoped `shopId` queries)
+- **Auth:** Stateless JWT authentication, role-based access control, bcrypt password hashing
+- **Utilities:** PDFKit (invoices), Nodemailer (email dispatch)
 
-## 🛠️ Technology Stack
-
-| Layer | Technologies |
-| :--- | :--- |
-| **Frontend Applications** | Next.js (App Router), React 19, Tailwind CSS, Lucide Icons, Sonner |
-| **Data Visualization** | Chart.js, Recharts, React-Chartjs-2 |
-| **Backend APIs** | Node.js, Express.js (RESTful architecture), Prisma ORM |
-| **Database** | PostgreSQL with strict relational modeling and tenant-scoped queries |
-| **Authentication & Security** | Stateless JWT (JSON Web Tokens), bcryptjs password hashing, RBAC |
-| **Document & Communication** | PDFKit (custom invoice generation), Nodemailer (SMTP dispatch) |
-
----
-
-## ⚙️ Getting Started & Local Setup
+## Setup & Running Locally
 
 ### Prerequisites
-* **Node.js**: v18.0.0 or higher
-* **PostgreSQL**: v14.0.0 or higher running on `localhost:5432`
-* **Package Manager**: `npm` (v9+)
+- Node.js 18+
+- PostgreSQL 14+ running locally (default port 5432)
+- npm
 
----
-
-### Step 1: Environment Configuration
-
-Copy the example environment files in all four project directories:
+### 1. Environment files
+Set up `.env` files in each subproject based on the required configs:
 
 ```bash
 # CRM-Main
@@ -89,81 +74,60 @@ cp CRM-Seller/frontend/.env.example CRM-Seller/frontend/.env
 cp CRM-Seller/backend/.env.example CRM-Seller/backend/.env
 ```
 
-Ensure your PostgreSQL connection strings in `crm-backend/.env` and `seller-backend/.env` match your local database credentials.
+Ensure `DATABASE_URL` in both backend `.env` files points to your Postgres instance.
 
----
+### 2. Database setup & seeds
 
-### Step 2: Database Initialization & Seeding
+Run migrations and seed default data for both backends:
 
 ```bash
-# Initialize CRM-Main Database
+# Main backend
 cd CRM-Main/crm-backend
 npm install
 npm run db:push
 npm run db:seed
 
-# Initialize CRM-Seller Database
+# Seller backend
 cd ../../CRM-Seller/backend
 npm install
 npm run db:dev
 npm run db:seed
 ```
 
----
+### 3. Start development servers
 
-### Step 3: Running the Applications
+Run each service in a separate terminal:
 
-Open separate terminal windows for each service:
-
-#### 1. CRM-Main Backend (API: `http://localhost:8001`)
 ```bash
-cd CRM-Main/crm-backend
-npm run dev
+# CRM-Main Backend (http://localhost:8001)
+cd CRM-Main/crm-backend && npm run dev
+
+# CRM-Main Frontend (http://localhost:3000)
+cd CRM-Main/crm-frontend && npm run dev
+
+# CRM-Seller Backend (http://localhost:5050)
+cd CRM-Seller/backend && npm run dev
+
+# CRM-Seller Frontend (http://localhost:3001)
+cd CRM-Seller/frontend && npm run dev
 ```
 
-#### 2. CRM-Main Frontend (Web: `http://localhost:3000`)
-```bash
-cd CRM-Main/crm-frontend
-npm run dev
-```
+## Default Seed Accounts
 
-#### 3. CRM-Seller Backend (API: `http://localhost:5050`)
-```bash
-cd CRM-Seller/backend
-npm run dev
-```
+### Seller Portal (`http://localhost:3001/login`)
+- **Admin:** `admin@crm-platform.local` / `Admin@123` (Username: `crm_owner`)
 
-#### 4. CRM-Seller Frontend (Web: `http://localhost:3001`)
-```bash
-cd CRM-Seller/frontend
-npm run dev
-```
+### Main Application (`http://localhost:3000/auth/login`)
+- **Retail Owner:** `crm.owner.retail` / `Admin@123`
+- **Retail Manager:** `crm.manager.retail` / `Emp@1234`
+- **Retail Staff:** `crm.staff.retail` / `Emp@5678`
+- **Restaurant Owner:** `crm.owner.restaurant` / `Admin@123`
+- **Restaurant Manager:** `crm.manager.restaurant` / `Emp@1234`
+- **Restaurant Staff:** `crm.staff.restaurant` / `Emp@5678`
+- **Services Owner:** `crm.owner.services` / `Admin@123`
 
----
+## Security & Multi-Tenancy
 
-## 🔑 Default Test Credentials
-
-### CRM-Seller Portal (`http://localhost:3001/login`)
-| Role | Identifier / Email | Password |
-| :--- | :--- | :--- |
-| **Super Admin** | `crm_owner` / `admin@crm-platform.local` | `Admin@123` |
-
-### CRM-Main Application (`http://localhost:3000/auth/login`)
-| Vertical | Role | Username / Identifier | Password | Default Redirect |
-| :--- | :--- | :--- | :--- | :--- |
-| **Retail** | Shop Owner | `crm.owner.retail` | `Admin@123` | `/dashboard` |
-| **Retail** | Store Manager | `crm.manager.retail` | `Emp@1234` | `/dashboard` |
-| **Retail** | Sales Cashier | `crm.staff.retail` | `Emp@5678` | `/dashboard` |
-| **Restaurant** | Restaurant Owner | `crm.owner.restaurant` | `Admin@123` | `/restaurant` |
-| **Restaurant** | Shift Manager | `crm.manager.restaurant` | `Emp@1234` | `/restaurant/hrms` |
-| **Restaurant** | Service Staff | `crm.staff.restaurant` | `Emp@5678` | `/restaurant/hrms` |
-| **Services** | Agency Owner | `crm.owner.services` | `Admin@123` | `/services` |
-
----
-
-## 🛡️ Security & Tenant Isolation
-
-* **Tenant Isolation**: Every database query strictly filters by `shopId` or `userId` extracted securely from validated JWT session payloads.
-* **Server-Side Authorization**: API routes protect against unauthorized cross-tenant data access through layered permission guards.
-* **Zero Secrets in Git**: All `.env` files and local sensitive credentials are automatically ignored via `.gitignore`.
-
+- Every operational query is strictly filtered by tenant `shopId` derived from the validated JWT token on the server side.
+- Client requests cannot read or mutate data belonging to other shops.
+- Sensitive files, keys, and `.env` configs are excluded from version control via `.gitignore`.
