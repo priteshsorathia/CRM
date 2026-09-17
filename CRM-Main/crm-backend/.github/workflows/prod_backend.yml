@@ -1,0 +1,62 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate Prisma Client
+      run: npx prisma generate
+            
+    - name: Run build
+      run: npm run build
+
+    - name: Run tests
+      run: npm test
+
+  # DEPLOY JOB
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          echo "Go to project folder"
+          cd app/gvoice-pos/backend
+
+          echo "Pull latest code"
+          git checkout -- package-lock.json
+          git pull origin main
+
+          echo "Install dependencies"
+          npm install
+
+          echo "Database sync with new"
+          npm run db:dev
+
+          echo "Restart backend"
+          pm2 restart backend

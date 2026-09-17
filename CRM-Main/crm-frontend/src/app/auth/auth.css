@@ -1,0 +1,4 @@
+/* This ensures the gradient background covers the full viewport */
+html, body {
+  height: 100%;
+}

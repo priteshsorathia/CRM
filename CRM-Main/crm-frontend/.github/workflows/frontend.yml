@@ -1,0 +1,56 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build Next.js app
+      run: npm run build
+
+  # 🚀 DEPLOY
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - name: Deploy frontend to EC2
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ubuntu
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          echo "Go to frontend folder"
+          cd app/gvoice-pos/frontend
+
+          echo "Pull latest code"
+          git checkout -- package-lock.json
+          git pull origin main
+
+          echo "Install dependencies"
+          npm install
+
+          echo "Build frontend"
+          npm run build
+
+          echo "Restart frontend"
+          pm2 restart frontend

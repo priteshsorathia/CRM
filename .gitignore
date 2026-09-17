@@ -1,0 +1,54 @@
+# ==============================================================================
+# Root .gitignore - CRM Enterprise Platform
+# ==============================================================================
+
+# Environment variables & secrets (CRITICAL: Do not commit)
+.env
+.env*
+*.env
+*.pem
+*.key
+
+# Archive files (Prevents committing large local backup zips to GitHub)
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Dependency directories
+node_modules/
+/.pnp
+.pnp.*
+
+# Production build outputs
+.next/
+out/
+build/
+dist/
+/generated/prisma
+
+# Logs & debugging
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# User uploads & cache
+uploads/
+/uploads/
+.cache/
+
+# OS and Editor metadata
+.DS_Store
+Thumbs.db
+.idea/
+*.tsbuildinfo
+next-env.d.ts
+
+# Scratch files
+z.txt
+changes.txt
+*.tmp
+

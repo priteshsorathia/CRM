@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model CompanySetting {
+  id        String   @id @default(cuid())
+  shopName  String?
+  phone     String?
+  email     String?
+  gstNumber String?
+  logoPath  String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("company_settings")
+}
+
+model Onboarding {
+  id               String   @id @default(cuid())
+  businessName     String
+  businessType     String
+  panType          String
+  panNumber        String
+  gstNumber        String?
+  addressProofType String
+  fssaiLicense     String?
+  fullName         String
+  email            String   @unique
+  phone            String
+  status           String   @default("Pending")
+  documentPan      String?
+  documentAddress  String?
+  documentGst      String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  serialId         Int      @unique @default(autoincrement())
+
+  @@map("onboardings")
+}
+
+
+
+
+
+model Review {
+  id           String   @id @default(cuid())
+  reviewerName String
+  rating       Int
+  comment      String
+  status       String   @default("Approved")
+  serialId     Int      @unique @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("reviews")
+}
+
+model Employee {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  username  String?  @unique
+  phone     String?
+  password  String
+  role      String   @default("Staff")
+  status    String   @default("Active")
+  serialId  Int      @unique @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("employees")
+}
